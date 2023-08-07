@@ -1,0 +1,23 @@
+# File: .gitlab-ci.yml
+image: docker:20.10.16
+
+stages:
+  - build-push-deploy
+
+build-push-deploy:
+  stage: build-push-deploy
+  image: google/cloud-sdk
+  rules:
+    - if: ($CI_COMMIT_BRANCH == "master")
+  services:
+    - docker:20.10.16-dind
+  script:
+    - echo $VITE_API_KEY >> env.txt # Apply firebase api for production
+    - echo $VITE_AUTH_DOMAIN >> env.txt # Apply firebase api for production
+    - echo $VITE_PROJECT_ID >> env.txt # Apply firebase api for production
+    - echo $FB_ADMIN_CONFIG >> fbAdminConfig.json
+    - echo $FB_CONFIG >> fbconfig.json
+    - echo $GCP_CLOUD_BUILD_SERVICE_ACCOUNT_KEY > gcloud-service-key.json # Google Cloud service accounts
+    - gcloud auth activate-service-account --key-file gcloud-service-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud builds submit . --config=cloudbuild.yaml
