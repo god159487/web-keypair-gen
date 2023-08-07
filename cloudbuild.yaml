@@ -1,0 +1,13 @@
+# File: cloudbuild.yaml
+steps:
+    # build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'asia.gcr.io/$PROJECT_ID/web_keypair_generator', '.' ]
+    # push the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'asia.gcr.io/$PROJECT_ID/web_keypair_generator']
+    # deploy to Cloud Run
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ['run', 'deploy', 'web-keypair-generator', '--image', 'asia.gcr.io/$PROJECT_ID/web_keypair_generator', '--region', 'asia-southeast1', '--timeout', '900', '--min-instances', '1', '--memory', '256Mi','--platform', 'managed', '--allow-unauthenticated']
+options:
+  logging: CLOUD_LOGGING_ONLY
