@@ -1,0 +1,10 @@
+version: "3"
+services:
+  web-ke-generator:
+    build:
+      context: ./  # Set the context to the root directory of your project
+      dockerfile: ./Dockerfile  # Path to your frontend Dockerfile
+    ports:
+      - "8080:8080"  # Map port 8080 on the host to port 80 in the container
+    restart: always
+    tty: true

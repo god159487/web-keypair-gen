@@ -3,9 +3,8 @@ services:
   keypair-generator.local:
     build:
       context: ../
-      dockerfile: ./local/Dockerfile
-    ports:
-      - "8080:8080"
+      dockerfile: ./Dockerfile
     environment:
       - FLASK_ENV=development
     tty: true
+    restart: always

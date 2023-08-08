@@ -3,7 +3,7 @@ FROM node:16.17.0-buster AS frontend-builder
 WORKDIR /opt/app/
 COPY ../frontend/package*.json ./
 
-RUN npm i
+RUN npm install
 
 
 
@@ -13,14 +13,14 @@ COPY ../frontend/index.html /opt/app
 COPY ../frontend/jsconfig.json /opt/app/
 COPY ../frontend/vite.config.js /opt/app/
 COPY ../frontend/.env /opt/app
-# RUN npm run build
+RUN npm run build
 
 
 # FROM python:3.8-slim-buster AS backend-builder
 
 # WORKDIR /opt/app/
 
-# アプリケーション実行に必要なパッケージをインストール
+# # アプリケーション実行に必要なパッケージをインストール
 # COPY ../backend/Pipfile* ./
 # RUN pip install --upgrade pip && \
 #     pip install pipenv && \
@@ -32,7 +32,7 @@ COPY ../frontend/.env /opt/app
 
 # WORKDIR /opt/app/
 
-# アプリケーションに必要なファイルをfrontend-builderからコンテナ内にコピーする
+# # アプリケーションに必要なファイルをfrontend-builderからコンテナ内にコピーする
 # COPY --from=frontend-builder /opt/app/dist/ ./static/
 # # アプリケーションに必要なファイルをbackend-builderからコンテナ内にコピーする
 # COPY --from=backend-builder /usr/local/lib/python3.8/site-packages/ /usr/local/lib/python3.8/site-packages/
@@ -41,7 +41,7 @@ COPY ../frontend/.env /opt/app
 # # アプリケーションに必要なファイルをローカルからコンテナ内にコピーする
 # COPY ../backend/src/ ./
 
-# ENTRYPOINT ["gunicorn", "app:create_app()", "--config=gunicorn.conf.py"]
+ENTRYPOINT ["gunicorn", "app:create_app()", "--config=gunicorn.conf.py"]
 # CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5000"]
-EXPOSE 8080
-# CMD [ "npm" ]
+# EXPOSE 5000
+CMD [ "npm" ]
